@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Purchase = require('../models/Purchase');
+const Stock = require('../models/Stock');
+const Sale = require('../models/Sale')
+const mongoose = require('mongoose');
 
 // Obtener todas las compras
 router.get('/', async (req, res) => {
@@ -12,26 +15,83 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Obtener por ID
-router.get('/:id', async (req, res) => {
+
+router.post('/purchases', async (req, res) => {
+    const { productId, product, vendor, quantity, unitCost, totalAmount } = req.body;
+
     try {
-        const purchase = await Purchase.findById(req.params.id);
-        res.json(purchase);
+        // Crear y guardar la nueva compra
+        const newPurchase = new Purchase({ productId, product, vendor, quantity, unitCost, totalAmount });
+        await newPurchase.save();
+
+        // Verificar y actualizar el stock
+        const stockItem = await Stock.findOne({ productId });
+        if (stockItem) {
+            stockItem.quantity += quantity;
+            await stockItem.save();
+        } else {
+            const newStockItem = new Stock({
+                productId,
+                product,
+                vendor,
+                quantity,
+                unitCost
+            });
+            await newStockItem.save();
+        }
+
+        res.status(201).json(newPurchase);
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+});
+
+// Añadir nueva venta
+router.post('/sales', async (req, res) => {
+    const { productId, quantity, unitCost, totalAmount } = req.body;
+
+    try {
+        const stockItem = await Stock.findOne({ productId });
+        if (!stockItem) {
+            throw new Error('Producto no encontrado en el stock.');
+        }
+        if (stockItem.quantity < quantity) {
+            throw new Error('Cantidad insuficiente en stock.');
+        }
+
+        stockItem.quantity -= quantity;
+        await stockItem.save();
+
+        const newSale = new Sale({
+            productId,
+            product: stockItem.product,
+            vendor: stockItem.vendor,
+            quantity,
+            unitCost,
+            totalAmount
+        });
+        await newSale.save();
+
+        res.status(201).json(newSale);
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+});
+
+
+
+
+
+// En tu archivo de rutas de Express, asumiendo que tienes un modelo Stock
+router.get('/stock-items', async (req, res) => {
+    try {
+        const stockItems = await Stock.find({});
+        res.json(stockItems);
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
 });
 
-// Crear una nueva compra
-router.post('/', async (req, res) => {
-    const purchases = req.body;  // Asume que req.body es un array
-    try {
-        const newPurchases = await Purchase.insertMany(purchases);
-        res.status(201).json(newPurchases);
-    } catch (err) {
-        res.status(400).json({ message: err.message });
-    }
-});
 
 // Actualizar una compra
 router.patch('/:id', async (req, res) => {
@@ -53,4 +113,4 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
-module.exports = router;
+module.exports = router;
