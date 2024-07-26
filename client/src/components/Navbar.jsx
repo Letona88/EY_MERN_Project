@@ -6,7 +6,7 @@ import userIcon from "../assets/icons/person.png"
 import chartImage from "../assets/icons/chart.bar.png"
 import ingresoIcon from "../assets/icons/plus.circle.png"
 import historyIcon from "../assets/icons/book.pages.png"
-import examenesIcon from  "../assets/icons/testtube.2.png"
+import stockIcon from  "../assets/icons/testtube.2.png"
 
 const links = [    // Constante que contiene las rutas del proyecto
     {
@@ -24,9 +24,9 @@ const links = [    // Constante que contiene las rutas del proyecto
         icon: historyIcon
     },
     {
-        label: "Exámenes",
-        route: "/examenes",
-        icon: examenesIcon
+        label: "Stock",
+        route: "/stock",
+        icon: stockIcon
     },
 
 ]
