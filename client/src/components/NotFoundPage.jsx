@@ -9,7 +9,7 @@ function NotFoundPage(){
         <p className="mt-2 text-gray-600">
           Lo sentimos, pero la página que buscas no existe o fue movida.
         </p>
-        <a href="/dashboardhome" className="mt-6 inline-block bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-300">
+        <a href="/dashboard" className="mt-6 inline-block bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-300">
           Volver al inicio
         </a>
       </div>

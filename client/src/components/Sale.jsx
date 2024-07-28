@@ -15,15 +15,15 @@ export function NewSale() {
     const [stockItems, setStockItems] = useState([]);
 
     useEffect(() => {
-        const loadStockItems = async () => {
-            const items = await fetchStockItems();
-            setStockItems(items);
-            console.log(items)
-            if (items.length > 0) {
-                handleChange({ target: { name: 'productId', value: items[0].productId } });
+        async function loadStockData() {
+            try {
+                const items = await fetchStockItems();
+                setStockItems(items); // Simplemente establece los artículos de stock
+            } catch (error) {
+                console.error("Error loading stock items:", error);
             }
-        };
-        loadStockItems();
+        }
+        loadStockData();
     }, []);
 
     const handleChange = (e) => {
@@ -72,7 +72,7 @@ export function NewSale() {
         try {
             const data = await addNewSale(sale);
             console.log('Sale added successfully:', data);
-            navigate('/dashboardhome');
+            navigate('/dashboard');
         } catch (error) {
             console.error('Failed to submit sale:', error);
         }

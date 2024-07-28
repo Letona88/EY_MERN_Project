@@ -50,7 +50,7 @@ export function NewPurchase() {
         try {
             const data = await addNewPurchase(purchase);
             console.log('Purchase added successfully:', data);
-            navigate('/dashboardhome');
+            navigate('/dashboard');
         } catch (error) {
             console.error('Failed to submit purchase:', error);
         }

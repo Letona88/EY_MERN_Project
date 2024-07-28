@@ -6,7 +6,7 @@ import userIcon from "../assets/icons/person.png"
 import chartImage from "../assets/icons/chart.bar.png"
 import ingresoIcon from "../assets/icons/plus.circle.png"
 import historyIcon from "../assets/icons/book.pages.png"
-import stockIcon from  "../assets/icons/testtube.2.png"
+import boxIcon from "../assets/icons/box.png"
 
 const links = [    // Constante que contiene las rutas del proyecto
     {
@@ -24,9 +24,9 @@ const links = [    // Constante que contiene las rutas del proyecto
         icon: historyIcon
     },
     {
-        label: "Stock",
-        route: "/stock",
-        icon: stockIcon
+        label: "Gestion de Stock",
+        route: "/manage",
+        icon: boxIcon
     },
 
 ]
@@ -54,7 +54,7 @@ function NavBar() {
 
     return (
         <div className="flex flex-col items-center w-40 h-full overflow-hidden text-gray-400 bg-gray-900">
-            <Link className="flex justify-center items-center w-full px-3 mt-3" to="/dashboardhome">
+            <Link className="flex justify-center items-center w-full px-3 mt-3" to="/dashboard">
                 <span className="ml-2 text-sm text-white font-bold">Western Store</span>
             </Link>
 

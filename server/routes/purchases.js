@@ -61,7 +61,6 @@ router.post('/sales', async (req, res) => {
 
         stockItem.quantity -= quantity;
         await stockItem.save();
-
         const newSale = new Sale({
             productId,
             product: stockItem.product,
@@ -71,7 +70,6 @@ router.post('/sales', async (req, res) => {
             totalAmount
         });
         await newSale.save();
-
         res.status(201).json(newSale);
     } catch (err) {
         res.status(400).json({ message: err.message });
@@ -79,10 +77,7 @@ router.post('/sales', async (req, res) => {
 });
 
 
-
-
-
-// En tu archivo de rutas de Express, asumiendo que tienes un modelo Stock
+// Obtener todos los productos de stock
 router.get('/stock-items', async (req, res) => {
     try {
         const stockItems = await Stock.find({});
@@ -92,22 +87,60 @@ router.get('/stock-items', async (req, res) => {
     }
 });
 
-
-// Actualizar una compra
-router.patch('/:id', async (req, res) => {
+// Actualizar un artículo de stock
+router.patch('/stock-items/:id', async (req, res) => {
     try {
-        const updatedPurchase = await Purchase.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        res.json(updatedPurchase);
+        const updatedItem = await Stock.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        res.json(updatedItem);
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
 });
 
-// Eliminar una compra
-router.delete('/:id', async (req, res) => {
+// Eliminar un artículo de stock
+router.delete('/stock-items/:id', async (req, res) => {
     try {
-        const deletedPurchase = await Purchase.findByIdAndDelete(req.params.id);
-        res.json({ message: 'Purchase deleted' });
+        await Stock.findByIdAndDelete(req.params.id);
+        res.json({ message: 'Stock item deleted' });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// Obtener datos de ventas por producto
+router.get('/sales-data', async (req, res) => {
+    try {
+        const sales = await Sale.aggregate([
+            { $group: { _id: "$product", totalSales: { $sum: "$quantity" } } },
+            { $sort: { totalSales: -1 } }
+        ]);
+        res.json(sales);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// Obtener datos de compras por fecha
+router.get('/purchase-data', async (req, res) => {
+    try {
+        const purchases = await Purchase.aggregate([
+            { $group: { _id: { $dateToString: { format: "%Y-%m-%d", date: "$date" } }, totalPurchases: { $sum: "$quantity" } } },
+            { $sort: { _id: 1 } }
+        ]);
+        res.json(purchases);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// Obtener datos de ventas por proveedor
+router.get('/vendor-data', async (req, res) => {
+    try {
+        const vendors = await Sale.aggregate([
+            { $group: { _id: "$vendor", totalVendorSales: { $sum: "$quantity" } } },
+            { $sort: { totalVendorSales: -1 } }
+        ]);
+        res.json(vendors);
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
