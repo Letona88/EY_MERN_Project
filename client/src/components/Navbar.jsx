@@ -55,7 +55,7 @@ function NavBar() {
     return (
         <div className="flex flex-col items-center w-40 h-full overflow-hidden text-gray-400 bg-gray-900">
             <Link className="flex justify-center items-center w-full px-3 mt-3" to="/dashboard">
-                <span className="ml-2 text-sm text-white font-bold">Western Store</span>
+                <span className="ml-2 text-sm text-white font-bold">Distribuidora GT</span>
             </Link>
 
             <div className="w-full px-2 flex-1">
@@ -65,7 +65,7 @@ function NavBar() {
                             key={index}
                             to={link.route}
                             className={`flex items-center w-full h-12 px-3 mt-2 rounded 
-                                        ${location.pathname.startsWith(link.route) ? 'bg-orange-700 text-gray-300' : 'hover:bg-gray-700 hover:text-gray-300'}`}
+                                        ${location.pathname.startsWith(link.route) ? 'bg-yellow-500 text-gray-300' : 'hover:bg-gray-700 hover:text-gray-300'}`}
                             onClick={() => setActiveLink(link.route)}
                         >
                             <img src={link.icon} alt={link.label}  className="h-5 w-5"/>
@@ -82,7 +82,7 @@ function NavBar() {
                             key={index}
                             to={link.route}
                             className={`flex items-center w-full h-12 px-3 mt-2 rounded 
-                                ${activeLink === link.route ? 'bg-orange-700 text-gray-300' : 'hover:bg-gray-700 hover:text-gray-300'}`}
+                                ${activeLink === link.route ? 'bg-yellow-500 text-gray-300' : 'hover:bg-gray-700 hover:text-gray-300'}`}
                             onClick={() => setActiveLink(link.route)}
                         >
                             <img src={link.icon} alt={link.label} className="h-5 w-5"/>
