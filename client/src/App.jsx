@@ -18,7 +18,7 @@ function App() {
             <Route path="/purchase" element={<NewPurchase />} />
             <Route path='/newsale' element={<NewSale/>} />
             <Route path='/account' element={<AccountView/>} />
-            <Route path='/dashb+9898oard' element={<Dashboard/>} />
+            <Route path='/dashboard' element={<Dashboard/>} />
             <Route path='/manage' element={<ManageStock/>} />
             <Route path='/info' element={<Info/>} />
             <Route path="*" element={<NotFoundPage />} />
